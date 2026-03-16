@@ -1,0 +1,25 @@
+model Space {
+    id        String   @id @default(cuid())
+    name      String   @unique
+    createdBy String
+    createdAt DateTime @default(now())
+
+    creator  User          @relation(fields: [createdBy], references: [id])
+    messages ChatMessage[]
+
+    @@index([createdBy])
+}
+
+model ChatMessage {
+    id        String   @id @default(cuid())
+    spaceId   String
+    userId    String
+    text      String
+    createdAt DateTime @default(now())
+
+    space Space @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+    user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([spaceId])
+    @@index([userId])
+}

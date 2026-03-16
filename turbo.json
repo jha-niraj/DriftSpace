@@ -2,7 +2,13 @@
 	"$schema": "https://turborepo.com/schema.json",
 	"ui": "tui",
 	"globalEnv": [
-		"DATABASE_URL"
+		"DATABASE_URL",
+		"NEXTAUTH_URL",
+		"NEXTAUTH_SECRET",
+		"RESEND_API_KEY",
+		"CLOUDINARY_CLOUD_NAME",
+		"CLOUDINARY_API_KEY",
+		"CLOUDINARY_API_SECRET"
 	],
 	"tasks": {
 		"generate": {
@@ -21,7 +27,12 @@
 			],
 			"env": [
 				"DATABASE_URL",
-				"DIRECT_URL"
+				"NEXTAUTH_URL",
+				"NEXTAUTH_SECRET",
+				"RESEND_API_KEY",
+				"CLOUDINARY_CLOUD_NAME",
+				"CLOUDINARY_API_KEY",
+				"CLOUDINARY_API_SECRET"
 			],
 			"inputs": [
 				"$TURBO_DEFAULT$",
@@ -44,7 +55,16 @@
 		},
 		"dev": {
 			"cache": false,
-			"persistent": true
+			"persistent": true,
+			"env": [
+				"DATABASE_URL",
+				"NEXTAUTH_URL",
+				"NEXTAUTH_SECRET",
+				"RESEND_API_KEY",
+				"CLOUDINARY_CLOUD_NAME",
+				"CLOUDINARY_API_KEY",
+				"CLOUDINARY_API_SECRET"
+			]
 		}
 	}
 }

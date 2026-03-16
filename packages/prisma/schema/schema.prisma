@@ -17,12 +17,37 @@ model User {
     id             String   @id @default(cuid())
     email          String   @unique
     name           String?
-    hashedPassword String
+    hashedPassword String?
+    emailVerified  DateTime?
+    college        String?
+    semester       String?
+    stream         String?
     image          String?
     address        String?
     role           Role     @default(USER)
     createdAt      DateTime @default(now())
     updatedAt      DateTime @updatedAt
 
-    admin AdminAccess? @relation("UserAdminAccess")
+    admin        AdminAccess?  @relation("UserAdminAccess")
+    spaces       Space[]
+    chatMessages ChatMessage[]
+    emailOtps    EmailOTP[]
+
+    @@index([email])
+}
+
+model EmailOTP {
+    id         String    @id @default(cuid())
+    userId     String?
+    email      String
+    otpHash    String
+    expiresAt  DateTime
+    consumedAt DateTime?
+    attempts   Int       @default(0)
+    createdAt  DateTime  @default(now())
+
+    user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+    @@index([email, createdAt])
+    @@index([expiresAt])
 }

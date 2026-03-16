@@ -22,40 +22,40 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
 	title: {
-		default: "The Coder'z",
-		template: "%s | The Coder'z"
+		default: "Space",
+		template: "%s | Space"
 	},
-	description: "The Engineering Intelligence Platform for Computer Science Students",
+	description: "Join live study rooms, hang out, and find your people.",
 	keywords: ["Learn", "Build Projects", "Computer Science", "Programming", "Coding", "Developer", "Tech Community", "Coding Resources", "Tech Articles", "Coding Tutorials"],
 	authors: [{ name: "Niraj Jha" }],
 	creator: "Shunya Tech",
 	publisher: "Shunya Tech",
-	metadataBase: new URL("https://www.coderzai.xyz"),
+	metadataBase: new URL("https://www.space.ai"),
 	alternates: {
 		canonical: "/",
 	},
 	openGraph: {
 		type: "website",
 		locale: "en_US",
-		url: "https://www.coderzai.xyz",
-		siteName: "The Coder'z",
-		title: "The Coder'z - The Engineering Intelligence Platform for Computer Science Students",
-		description: "The Engineering Intelligence Platform for Computer Science Students",
+		url: "https://www.space.ai",
+		siteName: "Space",
+		title: "Space - Join live study rooms, hang out, and find your people.",
+		description: "Join live study rooms, hang out, and find your people.",
 		images: [
 			{
 				url: "/mainlogo.jpeg",
 				width: 1024,
 				height: 1024,
-				alt: "The Coder'z - The Engineering Intelligence Platform for Computer Science Students",
+				alt: "Space - Join live study rooms, hang out, and find your people.",
 			},
 		],
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: "The Coder'z - The Engineering Intelligence Platform for Computer Science Students",
-		description: "The Engineering Intelligence Platform for Computer Science Students",
+		title: "Space - Join live study rooms, hang out, and find your people.",
+		description: "Join live study rooms, hang out, and find your people.",
 		images: ["/mainlogo.jpeg"],
-		creator: "@thecoderz",
+		creator: "@space",
 	},
 	icons: {
 		icon: [
