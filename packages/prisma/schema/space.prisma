@@ -1,20 +1,50 @@
 model Space {
-    id        String   @id @default(cuid())
-    name      String   @unique
+    id          String  @id @default(cuid())
+    name        String
+    description String?
+
+    type SpaceType @default(CUSTOM)
+
     createdBy String
     createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 
-    creator  User          @relation(fields: [createdBy], references: [id])
+    maxUsers Int? @default(50)
+
+    creator  User          @relation("SpaceCreator", fields: [createdBy], references: [id])
+    members  SpaceMember[]
     messages ChatMessage[]
 
     @@index([createdBy])
+    @@index([type])
+}
+
+model SpaceMember {
+    id String @id @default(cuid())
+
+    userId  String
+    spaceId String
+
+    joinedAt DateTime @default(now())
+
+    role Role @default(USER)
+
+    user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+    space Space @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+
+    @@unique([userId, spaceId])
+    @@index([spaceId])
 }
 
 model ChatMessage {
-    id        String   @id @default(cuid())
-    spaceId   String
-    userId    String
-    text      String
+    id String @id @default(cuid())
+
+    spaceId String
+    userId  String
+
+    text String
+    type MessageType @default(TEXT)
+
     createdAt DateTime @default(now())
 
     space Space @relation(fields: [spaceId], references: [id], onDelete: Cascade)

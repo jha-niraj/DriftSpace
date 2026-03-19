@@ -13,9 +13,28 @@ enum Role {
     ADMIN
 }
 
+enum SpaceType {
+    LIBRARY
+    HOSTEL
+    CAFETERIA
+    CUSTOM
+}
+
+enum PresenceStatus {
+    ONLINE
+    IDLE
+    STUDYING
+    OFFLINE
+}
+
+enum MessageType {
+    TEXT
+    SYSTEM
+}
+
 model User {
-    id             String   @id @default(cuid())
-    email          String   @unique
+    id             String    @id @default(cuid())
+    email          String    @unique
     name           String?
     hashedPassword String?
     emailVerified  DateTime?
@@ -24,14 +43,14 @@ model User {
     stream         String?
     image          String?
     address        String?
-    role           Role     @default(USER)
-    createdAt      DateTime @default(now())
-    updatedAt      DateTime @updatedAt
+    role           Role      @default(USER)
+    createdAt      DateTime  @default(now())
+    updatedAt      DateTime  @updatedAt
 
-    admin        AdminAccess?  @relation("UserAdminAccess")
-    spaces       Space[]
+    spaces       Space[]       @relation("SpaceCreator")
     chatMessages ChatMessage[]
     emailOtps    EmailOTP[]
+    spaceMembers SpaceMember[]
 
     @@index([email])
 }
