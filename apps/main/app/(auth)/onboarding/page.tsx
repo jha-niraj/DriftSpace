@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "@repo/ui/components/ui/sonner";
+import { useSession } from "@repo/auth/client";
 import { Button } from "@repo/ui/components/ui/button";
 import { Input } from "@repo/ui/components/ui/input";
 import { Label } from "@repo/ui/components/ui/label";
@@ -10,9 +11,11 @@ import {
     Select, SelectContent, SelectItem, SelectTrigger, SelectValue
 } from "@repo/ui/components/ui/select";
 import { completeOnboarding } from "@/actions/onboarding.action";
+import { ThemeToggle } from "@repo/ui/components/themetoggle";
 
 export default function OnboardingPage() {
     const router = useRouter();
+    const { update } = useSession();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
@@ -32,11 +35,17 @@ export default function OnboardingPage() {
         try {
             const res = await completeOnboarding(formData);
             if (res.success) {
-                router.push("/home");
+                await update({
+                    user: {
+                        name: formData.name.trim(),
+                        onboardingCompleted: true,
+                    },
+                });
+                router.replace("/home");
             } else {
-                toast.error("Something went wrong. Please try again.");
+                toast.error(res.message || "Something went wrong. Please try again.");
             }
-        } catch (error) {
+        } catch {
             toast.error("Something went wrong. Please try again.");
         } finally {
             setLoading(false);
@@ -44,15 +53,17 @@ export default function OnboardingPage() {
     };
 
     return (
-        <div className="relative min-h-screen bg-[#fafafa] dark:bg-[#09090b]">
-            <div className="absolute inset-x-0 top-0 p-6">
-                <div
-                    className="font-sans text-lg font-bold tracking-tight text-zinc-900 dark:text-zinc-50"
-                    style={{ fontFeatureSettings: '"ss01", "cv01"' }}
-                >
+        <div className="relative h-screen overflow-hidden bg-[#f7f7f5] text-zinc-900 selection:bg-zinc-200 dark:bg-[#0d0d0c] dark:text-zinc-100 dark:selection:bg-zinc-800">
+            <div className="pointer-events-none absolute inset-0 -z-10">
+                <div className="absolute -left-24 top-10 h-56 w-56 rounded-full bg-zinc-300/40 blur-3xl dark:bg-zinc-700/20" />
+                <div className="absolute -right-24 bottom-10 h-56 w-56 rounded-full bg-emerald-200/30 blur-3xl dark:bg-emerald-800/20" />
+            </div>
+            <header className="absolute inset-x-0 top-0 z-20 mx-auto flex w-full max-w-4xl items-center justify-between px-6 py-6">
+                <div className="text-lg font-bold tracking-tight" style={{ fontFeatureSettings: '"ss01", "cv01"' }}>
                     AfterClass
                 </div>
-            </div>
+                <ThemeToggle />
+            </header>
             <main className="flex min-h-screen flex-col items-center justify-center p-6">
                 <div className="w-full max-w-[480px] animate-in fade-in slide-in-from-bottom-4 duration-500 rounded-2xl border border-zinc-200 bg-white p-8 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
                     <div className="mb-8">
@@ -88,14 +99,14 @@ export default function OnboardingPage() {
                         </div>
                         <div className="grid gap-6 sm:grid-cols-2">
                             <div className="space-y-2">
-                                <Label htmlFor="semester" className="text-zinc-700 dark:text-zinc-300 text-xs font-semibold uppercase tracking-wider">Semester / Year</Label>
+                                <Label htmlFor="semester" className="text-zinc-700 dark:text-zinc-300 text-xs font-semibold uppercase tracking-wider">Semester</Label>
                                 <Select onValueChange={(val) => setFormData(prev => ({ ...prev, semester: val }))} required>
                                     <SelectTrigger className="h-11 rounded-lg border-zinc-200 bg-transparent dark:border-zinc-800">
-                                        <SelectValue placeholder="Select year" />
+                                        <SelectValue placeholder="Select semester" />
                                     </SelectTrigger>
                                     <SelectContent className="rounded-lg border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
                                         {
-                                            ["Year 1", "Year 2", "Year 3", "Year 4", "Year 5", "Year 6", "Year 7", "Year 8"].map(yr => (
+                                            ["Semester 1", "Semester 2", "Semester 3", "Semester 4", "Semester 5", "Semester 6", "Semester 7", "Semester 8"].map(yr => (
                                                 <SelectItem key={yr} value={yr} className="focus:bg-zinc-100 dark:focus:bg-zinc-800">
                                                     {yr}
                                                 </SelectItem>

@@ -57,11 +57,6 @@ export default withAuth(
             nextUrl.pathname.startsWith(route)
         )
 
-        // Check if current path is a public route
-        const isPublicRoute = publicRoutes.some(route =>
-            nextUrl.pathname === route || (route !== '/' && nextUrl.pathname.startsWith(route))
-        )
-
         // If user is not logged in and trying to access protected route
         if (!isLoggedIn && isProtectedRoute) {
             const signInUrl = new URL('/', nextUrl.origin)

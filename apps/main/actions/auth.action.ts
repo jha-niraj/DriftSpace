@@ -142,7 +142,7 @@ export async function handleRegisterAction(email: string, password: string): Pro
     }
 }
 
-interface OTPVerifyResult extends RegisterResult {}
+type OTPVerifyResult = RegisterResult;
 export async function verifyOtp(email: string, otp: string): Promise<OTPVerifyResult> {
     const normalizedEmail = email.trim().toLowerCase();
     const normalizedOtp = otp.trim();

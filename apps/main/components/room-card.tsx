@@ -11,6 +11,7 @@ interface RoomCardProps {
 export function RoomCard({ id, name, isLive, peopleCount, onClick }: RoomCardProps) {
     return (
         <div
+            data-room-id={id}
             onClick={onClick}
             className="group relative flex h-[130px] cursor-pointer flex-col justify-between rounded-xl border border-zinc-200 bg-white p-4 transition-all duration-150 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900"
         >

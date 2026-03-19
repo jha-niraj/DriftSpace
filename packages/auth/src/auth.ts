@@ -6,6 +6,20 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import prisma from "@repo/prisma";
 import bcrypt from "bcryptjs";
 
+function hasCompletedOnboarding(user: {
+    name?: string | null;
+    college?: string | null;
+    semester?: string | null;
+    stream?: string | null;
+}): boolean {
+    return Boolean(
+        user.name?.trim() &&
+        user.college?.trim() &&
+        user.semester?.trim() &&
+        user.stream?.trim()
+    );
+}
+
 export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
 
@@ -64,6 +78,7 @@ export const authOptions: NextAuthOptions = {
                                 image: freshUser.image || null,
                                 role: freshUser.role,
                                 emailVerified: freshUser.emailVerified ? new Date() : null,
+                                onboardingCompleted: hasCompletedOnboarding(freshUser),
                             };
                         } else {
                             throw new Error("EMAIL_NOT_VERIFIED");
@@ -88,6 +103,7 @@ export const authOptions: NextAuthOptions = {
                         image: user.image || null,
                         role: user.role,
                         emailVerified: user.emailVerified ? new Date() : null,
+                        onboardingCompleted: hasCompletedOnboarding(user),
                     };
                 } catch (error) {
                     console.error("Authorization error:", error);
@@ -104,13 +120,22 @@ export const authOptions: NextAuthOptions = {
                 token.id = user.id;
                 token.email = user.email;
                 token.name = user.name;
-                token.image = token.image;
-                token.role = token.role;
+                token.image = user.image;
+                token.role = user.role;
+                token.onboardingCompleted = Boolean(user.onboardingCompleted);
             }
 
             // Support session updates
-            if (trigger === "update" && session) {
-                return { ...token, ...session.user };
+            if (trigger === "update" && session?.user) {
+                if (session.user.name !== undefined) {
+                    token.name = session.user.name;
+                }
+                if (session.user.image !== undefined) {
+                    token.image = session.user.image;
+                }
+                if (session.user.onboardingCompleted !== undefined) {
+                    token.onboardingCompleted = Boolean(session.user.onboardingCompleted);
+                }
             }
 
             return token;
@@ -124,6 +149,7 @@ export const authOptions: NextAuthOptions = {
                 session.user.name = token.name;
                 session.user.image = token.image;
                 session.user.role = token.role;
+                session.user.onboardingCompleted = Boolean(token.onboardingCompleted);
             }
             return session;
         },

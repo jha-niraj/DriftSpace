@@ -2,6 +2,7 @@
 	"$schema": "https://turborepo.com/schema.json",
 	"ui": "tui",
 	"globalEnv": [
+		"NODE_ENV",
 		"DATABASE_URL",
 		"NEXTAUTH_URL",
 		"NEXTAUTH_SECRET",
@@ -26,6 +27,7 @@
 				"^build"
 			],
 			"env": [
+				"NODE_ENV",
 				"DATABASE_URL",
 				"NEXTAUTH_URL",
 				"NEXTAUTH_SECRET",
@@ -57,6 +59,7 @@
 			"cache": false,
 			"persistent": true,
 			"env": [
+				"NODE_ENV",
 				"DATABASE_URL",
 				"NEXTAUTH_URL",
 				"NEXTAUTH_SECRET",
